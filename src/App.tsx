@@ -66,6 +66,7 @@ function renderInputTokens(tokens: string[]): string {
 
 function Calculator() {
   const [inputTokens, setInputTokens] = useState<string[]>([]);
+  const [shouldClear, setShouldClear] = useState(false);
   const error = isError(inputTokens);
   const displayText = error ? getErrorMessage(inputTokens) : renderInputTokens(inputTokens);
 
@@ -89,7 +90,10 @@ function Calculator() {
                 ? "bg-gray-200 hover:bg-gray-300"
                 : "bg-blue-100 hover:bg-blue-200",
             )}
-            onClick={() => setInputTokens((t) => (error ? [] : button.handler(t)))}
+            onClick={() => {
+              setInputTokens((t) => button.handler(error || shouldClear ? [] : t));
+              setShouldClear(button.id === "fn_equals");
+            }}
           >
             {button.label}
           </button>
